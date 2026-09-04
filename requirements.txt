@@ -1,2 +1,2 @@
-No external Python packages required.
-Application uses Python 3.11 standard library only.
+# No external Python packages required.
+# Application uses Python 3.11+ standard library only.
