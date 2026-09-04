@@ -96,7 +96,6 @@ class RetailMindRequestHandler(BaseHTTPRequestHandler):
             all_alerts = get_all_alerts(dataset, store_id=store_id)
             warnings = validate_data_quality(dataset)
 
-            # Compute stable count & coverage avg
             all_prods = calculate_product_performance(dataset, store_id=store_id)
             stable_count = sum(1 for p in all_prods if p["risk_level"] == "HEALTHY")
             valid_covs = [p["days_remaining"] for p in all_prods if p["days_remaining"] is not None and p["days_remaining"] < 365]
@@ -185,7 +184,6 @@ class RetailMindRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": f"Product {prod_id} not found"}).encode("utf-8"))
                 return
 
-            # Fetch daily sales trend (last 90 days)
             sales_history = []
             for s in dataset["sales"]:
                 if s["product_id"] == prod_id and (store_id is None or s["store_id"] == store_id):
@@ -203,7 +201,6 @@ class RetailMindRequestHandler(BaseHTTPRequestHandler):
             trend = [{"date": k, "quantity_sold": v} for k, v in sorted(daily_map.items())]
             prod_info["sales_trend"] = trend
 
-            # Add demand forecast and transfer opportunities for product drawer
             forecasts = calculate_demand_forecast(dataset, store_id=store_id)
             fc_item = next((f for f in forecasts if f["product_id"] == prod_id), None)
             prod_info["demand_forecast"] = fc_item
@@ -270,13 +267,8 @@ class RetailMindRequestHandler(BaseHTTPRequestHandler):
 
             dataset = load_dataset()
 
-            # Step 1: Deterministic Analytics & Intent parsing
             evidence_dict = parse_question_intent(question, dataset)
-
-            # Step 2: Local RAG Knowledge Retrieval
             policy_context = retrieve_relevant_context(question)
-
-            # Step 3: Call Gemini REST API / Fallback
             response_payload = query_copilot(question, evidence_dict, policy_context)
 
             self._set_headers(200)
@@ -287,13 +279,19 @@ class RetailMindRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(b"Endpoint not found.")
 
 
-def run_server(port=8000):
-    """Starts the Nexus Command Center pure Python HTTP server on port 8000."""
-    server_address = ("", port)
+def run_server(port=None):
+    """
+    Starts the Nexus Command Center pure Python HTTP server.
+    Binds to 0.0.0.0 and reads Render's PORT environment variable (default fallback: 8000).
+    """
+    if port is None:
+        port = int(os.environ.get("PORT", 8000))
+
+    server_address = ("0.0.0.0", port)
     httpd = ThreadedHTTPServer(server_address, RetailMindRequestHandler)
     print(f"==================================================")
     print(f" NEXUS RETAIL COMMAND CENTER — ENGINE ACTIVE")
-    print(f" Listening on http://localhost:{port}")
+    print(f" Binding to 0.0.0.0:{port}")
     print(f" Standard Library Only (Zero External Dependencies)")
     print(f"==================================================")
     try:
@@ -305,4 +303,5 @@ def run_server(port=8000):
 
 if __name__ == "__main__":
     load_dataset()
-    run_server(port=8000)
+    port_val = int(os.environ.get("PORT", 8000))
+    run_server(port=port_val)

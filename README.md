@@ -124,7 +124,7 @@ User Query / UI Interaction
    Nexus Web Dashboard (HTML5 / Vanilla CSS3 / Vanilla JS)
             │
             ▼
-   Python HTTP Server (http.server.HTTPServer on port 8000)
+   Python HTTP Server (http.server.HTTPServer on port 8000 / $PORT)
             │
             ▼
 ┌─────────────────────────────────────────────────────────────┐
@@ -224,6 +224,28 @@ Open your browser and navigate to:
 
 ---
 
+## 🌐 Render Deployment Instructions
+
+NEXUS Retail Command Center is fully configured for Render web service deployment (`render.yaml` included):
+
+1. **Connect GitHub Repository**:
+   - In Render Dashboard, click **New +** $\rightarrow$ **Web Service**.
+   - Connect repository: [`ManiKandan-65/svgnexustiq24-hackathon`](https://github.com/ManiKandan-65/svgnexustiq24-hackathon.git).
+
+2. **Configure Settings**:
+   - **Environment**: `Python`
+   - **Build Command**: *(Leave completely blank)*
+   - **Start Command**: `python app.py`
+
+3. **Environment Variables**:
+   - `PORT`: Automatically assigned by Render (e.g. `10000`).
+   - `GEMINI_API_KEY` *(Optional)*: Add your key if natural language AI explanations are desired.
+
+4. **Deploy**:
+   - Click **Create Web Service**. Render will launch `python app.py` on `0.0.0.0:$PORT` automatically.
+
+---
+
 ## ⚡ Hackathon Value & Operational Impact
 
 1. **Zero Hallucination Risk**: Prevents costly retail ordering mistakes caused by black-box AI hallucinations.
@@ -233,23 +255,14 @@ Open your browser and navigate to:
 
 ---
 
-## 🔮 Future Enhancements
-
-- **Real-Time POS Streaming**: Integration with live Point-of-Sale transaction streams via WebSockets.
-- **Automated Purchase Order Generation**: One-click PDF/EDI purchase order creation for suppliers.
-- **Machine Learning Seasonal Forecasting**: Advanced ARIMA/Prophet models for seasonal demand peaks.
-- **Multi-Tenant Role Access**: Dedicated views for Store Managers, Regional Supervisors, and Procurement Directors.
-- **Cloud Container Deployment**: Dockerized container deployment to AWS/GCP serverless environments.
-
----
-
 ## 📁 Project Structure
 
 ```text
 Retail mind/
 │
-├── app.py                      # Main HTTP server & API route handler
+├── app.py                      # Main HTTP server (0.0.0.0:$PORT binding & API route handler)
 ├── README.md                   # Project documentation (TRACK_ID=PS03)
+├── render.yaml                 # Render deployment configuration
 ├── requirements.txt            # Zero-dependency specification file
 ├── .gitignore                  # Git exclusion rules
 │
