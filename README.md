@@ -1,147 +1,293 @@
 TRACK_ID=PS03
-# RetailMind — Evidence-Grounded Sales & Inventory Copilot
+# NEXUS RETAIL COMMAND CENTER
+### Real-Time Inventory Intelligence, Deterministic Analytics & Evidence-Grounded Decisions
 
-RetailMind is an evidence-grounded AI copilot built for store managers running small retail operations. It separates **deterministic Python analytics** from **LLM reasoning** to eliminate numerical hallucinations, ensure data grounding, and present verifiable evidence trails for every operational recommendation.
-
-## Problem Solved
-Store managers often struggle to synthesize complex, multi-store inventory and sales records into immediate actionable decisions. AI LLMs when tasked with numerical analysis often invent numbers or hallucinate causes. RetailMind solves this by:
-1. Performing 100% of mathematical and inventory risk calculations deterministically in Python.
-2. Retrieving relevant local store management policies.
-3. Supplying Gemini with calculated evidence to format concise, structured explanations adhering to a 5-part response structure (ANSWER, KEY NUMBERS, EVIDENCE, RECOMMENDATION, ASSUMPTIONS/LIMITATIONS).
-4. Strictly refusing to guess when data is missing ("I Don't Know" protocol).
+NEXUS Retail Command Center is an enterprise-grade retail inventory intelligence platform designed for store managers and operations teams. Built around a **zero-hallucination architecture**, NEXUS strictly separates 100% deterministic Python calculations from natural-language AI reasoning. Every stock alert, demand forecast, reorder recommendation, and inter-store transfer is backed by an audit-ready mathematical breakdown.
 
 ---
 
-## Architectural Separation & Engineering Principles
+## 🎯 Problem Statement
 
-```
-  Human Manager Decision
-            ▲
-            │
-┌───────────────────────┐
-│  Structured Response  │ (ANSWER, NUMBERS, EVIDENCE, RECOMMENDATION, ASSUMPTIONS)
-└───────────────────────┘
-            ▲
-            │
-┌───────────────────────┐
-│ Gemini REST Reasoning │ (urllib.request HTTPS call to Gemini API)
-└───────────────────────┘
-            ▲
-            │
-┌───────────────────────┐
-│ Evidence & RAG Policy │ (Local policy chunks & keyword retrieval)
-└───────────────────────┘
-            ▲
-            │
-┌───────────────────────┐
-│ Deterministic Engine  │ (Days of supply, sales growth %, spike & drop detection)
-└───────────────────────┘
-            ▲
-            │
-┌───────────────────────┐
-│ Standard CSV Dataset  │ (stores.csv, products.csv, inventory.csv, sales.csv)
-└───────────────────────┘
-```
+Running multi-store retail operations presents critical inventory challenges:
+
+1. **Stockout Risks & Lost Revenue**: Store managers often miss impending stockouts until shelves are empty, leading to frustrated customers and lost sales.
+2. **Overstock Capital Lockup**: Excess inventory ties up working capital in slow-moving items, increasing storage costs and markdown risks.
+3. **Inefficient Inter-Store Stock Balancing**: While Store A experiences a critical stockout, Store B may hold excess inventory of the exact same product, but managers lack visibility to transfer stock.
+4. **AI Hallucinations & Black-Box Decisions**: Generic AI chatbots often invent fake numbers or hallucinate arbitrary reasons for sales fluctuations without data backing.
 
 ---
 
-## Technology Stack (Zero External Python Package Architecture)
+## 💡 Solution
+
+NEXUS Retail Command Center solves these problems through an integrated, evidence-grounded intelligence platform:
+
+- **Deterministic Inventory Engine**: 100% reproducible Python calculations for stock coverage, daily sales velocity, and risk thresholds.
+- **Demand Forecasting**: Deterministic 7-day and 14-day demand projections and estimated stockout dates.
+- **Recommended Replenishment**: Automated target stock calculations ($\text{Avg Daily Sales} \times 14\text{d}$) and reorder quantity recommendations.
+- **Smart Transfer Network**: Automated detection of inter-store stock balancing opportunities (transferring surplus stock from Store B to fulfill stockout risks at Store A).
+- **What-If Inventory Simulator**: A non-mutating operational sandbox allowing managers to simulate demand shifts (-50% to +100%) and incoming stock before taking real-world action.
+- **Explainable "WHY?" Decision Panels**: Audit-ready mathematical breakdowns for every recommendation.
+- **Evidence Copilot**: Grounded natural-language query interface powered by Gemini 1.5 Flash + verified Python facts.
+
+---
+
+## ✨ Key Features
+
+### 1. Command Center Overview Dashboard
+- High-impact KPI Cards: `TOTAL PRODUCTS` (120), `CRITICAL STOCK` (44), `AT-RISK PRODUCTS` (44), `STABLE PRODUCTS`, and `ESTIMATED COVERAGE` (19.5d).
+- **Inventory Health Matrix**: Multi-store grid displaying real-time store x product health status (`CRITICAL`, `WARNING`, `HEALTHY`).
+- Store Performance Ranking table by revenue, volume, growth %, and low stock counts.
+
+### 2. Inventory Catalogue
+- Searchable catalog across 40 products and 8 categories.
+- Filtering by risk status (`CRITICAL`, `WARNING`, `OVERSTOCK`, `HEALTHY`).
+- Direct access to Product Details Side Drawer.
+
+### 3. Smart Stock Alerts & Explainable "WHY?" Decision Panels
+- Automatically sorted by operational urgency.
+- Every alert contains a **"WHY?"** button opening an audit-ready mathematical breakdown showing the exact formulas and threshold comparisons used.
+
+### 4. 7-Day / 14-Day Demand Forecast
+- Deterministic demand forecasting based on 30-day sales velocity.
+- Projected stock after 7 and 14 days.
+- Estimated stockout dates ($ \text{latest\_date} + \lceil \text{coverage\_days} \rceil $).
+
+### 5. Recommended Replenishment Engine
+- Calculates Target Stock and Recommended Reorder Quantity.
+- Urgency timeline badges (`Replenish within 24 hours` vs `Schedule within 48 hours`).
+
+### 6. Smart Inter-Store Transfers
+- Detects stockout risks at Store A ($\le 14$d coverage) alongside surplus inventory at Store B ($> 20$d coverage).
+- Calculates safe transfer quantities and provides clear operational rationale.
+
+### 7. What-If Inventory Simulator ("INVENTORY WHAT-IF LAB")
+- Non-mutating interactive simulation sandbox.
+- Controls for Daily Sales Velocity Change (-50% to +100%), Emergency Incoming Stock, and Target Coverage Days.
+- Live recalculation of projected coverage, stockout dates, and delta reorder needs.
+
+### 8. Product Details Side Drawer
+- Slide-out drawer with 90-day daily sales **SVG Trend Chart**.
+- 7d/14d demand forecast, reorder recommendations, and transfer opportunities.
+
+### 9. Evidence Copilot & RAG Retrieval
+- Grounded query engine for queries like *"Which products are at risk?"* or *"Where should stock be transferred?"*.
+- Output structured into: `QUERY` $\rightarrow$ `ANSWER` $\rightarrow$ `CALCULATIONS` $\rightarrow$ `EVIDENCE USED` $\rightarrow$ `DECISION` $\rightarrow$ `ASSUMPTIONS`.
+
+---
+
+## 📐 How the Intelligence Works (Deterministic Formulas)
+
+All numerical calculations are executed deterministically by Python standard library modules:
+
+1. **Average Daily Sales Velocity (30d)**:
+   $$\text{Avg Daily Sales} = \frac{\sum_{i=1}^{30} \text{Quantity Sold}_i}{30}$$
+
+2. **Stock Coverage Days**:
+   $$\text{Coverage Days} = \frac{\text{Current Stock}}{\text{Average Daily Sales}}$$
+
+3. **Demand Forecast (7-Day & 14-Day)**:
+   $$\text{Demand}_{7\text{d}} = \text{Avg Daily Sales} \times 7 \quad \mid \quad \text{Demand}_{14\text{d}} = \text{Avg Daily Sales} \times 14$$
+
+4. **Target Stock**:
+   $$\text{Target Stock} = \text{Avg Daily Sales} \times \text{Target Coverage Days (Default 14)}$$
+
+5. **Recommended Reorder Quantity**:
+   $$\text{Recommended Reorder} = \max(0, \text{Target Stock} - \text{Current Stock})$$
+
+6. **Estimated Stockout Date**:
+   $$\text{Stockout Date} = \text{Current Date} + \lceil \text{Coverage Days} \rceil \text{ days}$$
+
+7. **Smart Transfer Logic**:
+   $$\text{Transfer Qty} = \max\Big(5, \min\big(\text{Stock}_B - \text{ReorderLevel}_B, \, (14 - \text{Coverage}_A) \times \text{AvgSales}_A\big)\Big)$$
+   *(Triggers when Store A Coverage $\le 14$d and Store B Coverage $\ge 20$d).*
+
+---
+
+## 💻 Technology Stack
+
+NEXUS is engineered as a **ZERO-EXTERNAL-PYTHON-PACKAGE** application for maximum portability and fast startup:
 
 - **Backend**: Python 3.11 / 3.12 Standard Library (`http.server`, `urllib.request`, `json`, `csv`, `math`, `datetime`, `re`)
-- **Frontend**: HTML5, Vanilla CSS3 (custom theme), Vanilla JavaScript (Web APIs, No React, No Tailwind build)
+- **Frontend**: HTML5, Vanilla CSS3 (Custom Nexus Midnight/Cyan Dark Theme), Vanilla JavaScript (Web APIs, No React, No Tailwind build)
 - **Data Persistence**: In-memory loaded CSV datasets (`stores.csv`, `products.csv`, `inventory.csv`, `sales.csv`)
-- **AI Integration**: Gemini REST API (`gemini-2.5-flash` / `gemini-1.5-flash` via `urllib.request`)
-- **Visualizations**: Pure SVG 90-Day Daily Sales Trend Engine
+- **AI Integration**: Gemini REST API (`gemini-1.5-flash` / `gemini-2.0-flash` via standard `urllib.request`)
+- **Data Visualizations**: Pure SVG 90-Day Daily Sales Trend Engine
 
 ---
 
-## Key Features
+## 🏗️ System Architecture
 
-1. **Deterministic Analytics Engine**:
-   - **Total Revenue & Unit Volume** aggregation across 90 days.
-   - **Average Daily Sales (30d velocity)** calculation.
-   - **Stock Coverage / Days Remaining** (`current_stock / average_daily_sales`).
-   - **Stock-Out Risk Detection**: HIGH (&le; 7 days), MEDIUM (&le; 14 days).
-   - **Overstock Detection**: Coverage &ge; 90 days or stock &ge; 3.5x reorder level.
-   - **Sales Spike Detection**: &ge; 80% surge comparing recent 14d vs prior 14d.
-   - **Sales Drop Detection**: &ge; 40% decline comparing current vs previous monthly sales.
-   - **Store Performance Benchmark**: Revenue and volume ranking across stores.
-
-2. **Evidence-Grounded Manager Copilot**:
-   - Responds to natural language queries.
-   - Outputs strict 5-part structured responses:
-     - **ANSWER**: Direct explanation.
-     - **KEY NUMBERS**: Bulleted deterministic metrics.
-     - **EVIDENCE**: Exact data source and calculation formula.
-     - **RECOMMENDATION**: Actionable manager recommendation.
-     - **ASSUMPTIONS & LIMITATIONS**: Underlaying assumptions and data constraints.
-
-3. **Strict "I Don't Know" & Data Limitation Protocol**:
-   - Refuses to speculate on profit/margin when cost data is absent.
-   - Explains that future multi-year 2030 forecasts are unanswerable with historical 90-day data.
-   - States explicitly when sales drops cannot be attributed to a root cause due to missing promotional/pricing records.
-
-4. **Robust Graceful Fallback**:
-   - If `GEMINI_API_KEY` is missing or API request times out/fails, the backend seamlessly formats Python-calculated results into the structured 5-part output without crashing.
-
----
-
-## Dataset Structure
-
-The application automatically generates a synthetic 90-day retail dataset on first run:
-- **`data/stores.csv`**: 3 store locations (`ST01`: Chennai Central, `ST02`: Coimbatore Main, `ST03`: Madurai Plaza).
-- **`data/products.csv`**: 40 products across 8 categories (Electronics, Accessories, Home, Kitchen, Personal Care, Stationery, Grocery, Lifestyle).
-- **`data/inventory.csv`**: Stock level, reorder level, unit cost, and selling price for each store/product pair (120 records).
-- **`data/sales.csv`**: 90-day daily sales history (10,800 records).
+```
+User Query / UI Interaction
+            │
+            ▼
+   Nexus Web Dashboard (HTML5 / Vanilla CSS3 / Vanilla JS)
+            │
+            ▼
+   Python HTTP Server (http.server.HTTPServer on port 8000)
+            │
+            ▼
+┌─────────────────────────────────────────────────────────────┐
+│             DETERMINISTIC ANALYTICS ENGINE                  │
+│  - Stock Coverage & Daily Sales Velocity Calculation        │
+│  - 7d/14d Demand Forecasting & Stockout Date Projection     │
+│  - Target Stock & Replenishment Reorder Engine              │
+│  - Smart Inter-Store Transfer Network Logic                 │
+│  - Inventory What-If Simulation Sandbox                     │
+└─────────────────────────────────────────────────────────────┘
+            │                                  │
+            ▼                                  ▼
+ Local Inventory & Policy Data       Gemini REST API (urllib.request)
+ (stores, products, sales, policy)   (Natural-Language Explanation)
+            │                                  │
+            └──────────────────┬───────────────┘
+                               │
+                               ▼
+            Explainable & Grounded Decision Panel
+```
 
 ---
 
-## Knowledge Documents
+## 📊 Example Decision
 
-- **`knowledge/inventory_policy.txt`**: Stockout risk thresholds, overstock definitions, lead time assumptions, and reorder guidelines.
-- **`knowledge/retail_guidelines.txt`**: Guidelines for sales trend analysis, cause restriction rules for sales drops, and uncertainty handling.
+### Case Study: Wireless Mouse @ Chennai Central
+
+- **Current Stock**: 12 units
+- **Average Daily Sales**: 5.3 units/day
+- **Calculated Coverage**: 2.3 days
+- **Critical Threshold**: 7.0 days
+- **Target Stock (14d)**: 74 units
+- **Recommended Reorder**: 62 units
+
+#### Decision Explanation:
+> Current inventory of 12 units divided by recent average daily sales of 5.3 units/day yields approximately 2.3 days of supply. Because 2.3 days is below the critical safe threshold of 7.0 days, the deterministic engine flags this SKU as **CRITICAL STOCK-OUT RISK** and issues a recommendation: **REORDER 62 UNITS IMMEDIATELY**.
+> 
+> Simultaneously, the **Smart Transfer Network** detects that Coimbatore Main holds 91 units (20.4 days coverage) of Wireless Mouse and recommends an immediate inter-store transfer of **61 units** to bridge the gap.
 
 ---
 
-## Setup & Running Instructions
+## 🔬 What-If Simulator ("INVENTORY WHAT-IF LAB")
 
-### 1. Environment Variable (Optional for AI REST API)
-Set your Gemini API key in your terminal session:
+The What-If Simulator provides a non-mutating operational sandbox allowing store managers to evaluate hypothetical scenarios:
+- **Daily Sales Velocity Change**: Adjust slider from -50% to +100% demand shift.
+- **Incoming Emergency Stock**: Test adding 10, 25, 50+ emergency units.
+- **Target Coverage Days**: Modify replenishment buffer targets (default 14 days).
+
+All simulated outputs (projected coverage, stockout date, risk status, additional reorder needed) are calculated dynamically without modifying the underlying CSV database.
+
+---
+
+## ✅ Verification & Testing Results
+
+The complete NEXUS Retail Command Center test suite was executed and verified:
+
+```text
+=== TESTING NEXUS COMMAND CENTER ENDPOINTS ===
+Total Products: 120, Critical Stock: 44, At-Risk: 44, Coverage: 19.5d
+Health Matrix Rows: 40
+Sample Matrix Item: Wireless Mouse -> Chennai Central: CRITICAL (2.3d)
+
+Demand Forecasts Count: 120
+Sample Forecast: Wireless Mouse @ Chennai Central -> 7d Demand: 37.1 units, Stockout Date: Sep 07, 2026
+
+Reorders Count: 44
+Sample Reorder: Wireless Mouse @ Chennai Central -> Current: 12, Recommended Reorder: 62 units
+
+Smart Transfers Count: 4
+Sample Transfer: Move 61 units of Wireless Mouse from Coimbatore Main to Chennai Central
+
+Simulation Result: Wireless Mouse @ Chennai Central (+20% Sales, +25 Stock) -> Simulated Coverage: 5.8 days, Risk: CRITICAL STOCK-OUT RISK
+
+=== ALL NEXUS COMMAND CENTER ENDPOINTS VERIFIED 100% ===
+```
+
+---
+
+## 🚀 How to Run Locally
+
+### 1. Environment Variable (Optional for Gemini REST API)
+Set your Gemini API key in your terminal:
 ```cmd
 set GEMINI_API_KEY=your_gemini_api_key_here
 ```
-*(If unset, the application runs normally using the Deterministic Python Fallback Engine).*
+*(If unset, NEXUS automatically operates using the Deterministic Python Fallback Engine).*
 
 ### 2. Start Application
-No `pip install` required! Run using Python standard library:
+No `pip install` or `npm install` required! Run using Python standard library:
 ```cmd
 python app.py
 ```
-*(Or point to your installed Python binary, e.g. `py -3 app.py`)*
 
-### 3. Open Dashboard
+### 3. Access Command Center
 Open your browser and navigate to:
 [http://localhost:8000](http://localhost:8000)
 
 ---
 
-## Demo Test Scenarios
+## ⚡ Hackathon Value & Operational Impact
 
-### DEMO 1 — Normal Case (Stock-Out Risk)
-- **Question**: `"What products are running out?"`
-- **Expected Result**: Lists products with low days remaining (e.g. Wireless Mouse at Chennai Central with 12 units in stock, 5.2/day sales, ~2.3 days remaining, HIGH risk badge, and "Reorder immediately" recommendation).
-
-### DEMO 2 — Difficult Case (Unexplained Sales Drop)
-- **Question**: `"Why did Bluetooth Speaker sales drop?"`
-- **Expected Result**: Shows monthly sales drop (-90.0% decline from 20/day to 2/day), then states: `"The available dataset confirms a decline of 90.0%, but does not contain promotion, pricing, or marketing records, so the exact root cause cannot be established from this dataset."`
-
-### DEMO 3 — Data Not Available ("I Don't Know" Protocol)
-- **Question**: `"Which product has the highest profit?"`
-- **Expected Result**: System responds: `"I cannot answer this question because profit or margin data is not present in the current dataset context."`
+1. **Zero Hallucination Risk**: Prevents costly retail ordering mistakes caused by black-box AI hallucinations.
+2. **Actionable Financial Savings**: Identifies inter-store transfer opportunities before placing expensive new purchase orders.
+3. **Instant Transparency**: "WHY?" buttons build immediate trust with retail store managers.
+4. **Zero-Dependency Portability**: Boots up in milliseconds on any Python 3.11+ environment without dependency conflicts.
 
 ---
 
-## Known Limitations
+## 🔮 Future Enhancements
 
-1. **Single-Node In-Memory Storage**: CSV files are cached in memory on startup. Real-time external database connectors can be integrated via `src/data_loader.py`.
-2. **Standard Library Keyword Retrieval**: Uses token-overlap keyword scoring over local policy chunks. Can be augmented with embedding vector similarity when connected to an embedding API.
+- **Real-Time POS Streaming**: Integration with live Point-of-Sale transaction streams via WebSockets.
+- **Automated Purchase Order Generation**: One-click PDF/EDI purchase order creation for suppliers.
+- **Machine Learning Seasonal Forecasting**: Advanced ARIMA/Prophet models for seasonal demand peaks.
+- **Multi-Tenant Role Access**: Dedicated views for Store Managers, Regional Supervisors, and Procurement Directors.
+- **Cloud Container Deployment**: Dockerized container deployment to AWS/GCP serverless environments.
+
+---
+
+## 📁 Project Structure
+
+```text
+Retail mind/
+│
+├── app.py                      # Main HTTP server & API route handler
+├── README.md                   # Project documentation (TRACK_ID=PS03)
+├── requirements.txt            # Zero-dependency specification file
+├── .gitignore                  # Git exclusion rules
+│
+├── src/                        # Core Python Modules (Standard Library)
+│   ├── __init__.py
+│   ├── analytics.py            # Deterministic engine, formulas, forecasts & transfers
+│   ├── data_loader.py          # Synthetic dataset generator & CSV reader
+│   ├── gemini_client.py        # Gemini REST API client with deterministic fallback
+│   ├── retrieval.py            # Local RAG keyword retrieval engine
+│   ├── prompts.py              # Grounded system prompts & structured templates
+│   └── models.py               # Data models & dataclass structures
+│
+├── data/                       # CSV Datasets
+│   ├── stores.csv              # 3 retail stores (Chennai, Coimbatore, Madurai)
+│   ├── products.csv            # 40 products across 8 categories
+│   ├── inventory.csv           # Stock levels, unit costs, selling prices
+│   └── sales.csv               # 90-day daily sales history (10,800 records)
+│
+├── knowledge/                  # Local Knowledge Base Chunks
+│   ├── inventory_policy.txt    # Risk thresholds & reorder rules
+│   └── retail_guidelines.txt   # Trend analysis & uncertainty rules
+│
+├── static/                     # Web Assets
+│   ├── style.css               # Nexus Midnight/Cyan Dark Theme
+│   └── app.js                  # Navigation router, simulator & SVG chart engine
+│
+└── templates/                  # HTML Templates
+    └── index.html              # Nexus Command Center Single-Page App
+```
+
+---
+
+## 🔒 Security
+
+All secrets, environment variables, credentials, and temporary cache files are strictly excluded from version control via `.gitignore`. The application never exposes API keys to client-side JavaScript.
+
+---
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](https://opensource.org/licenses/MIT).
