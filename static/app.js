@@ -228,27 +228,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function fetchInventoryMatrix() {
+    const targetBody = document.getElementById('inventoryMatrixBody') || inventoryMatrixBody;
     try {
       const res = await fetch('/api/matrix');
-      if (!res.ok) throw new Error('Matrix fetch failed');
+      if (!res.ok) throw new Error(`Matrix fetch failed with status ${res.status}`);
       matrixCache = await res.json();
       renderInventoryMatrix(matrixCache);
     } catch (err) {
       console.error('[Matrix] Error:', err);
-      inventoryMatrixBody.innerHTML = `<tr><td colspan="5" class="text-center">Error loading matrix.</td></tr>`;
+      if (targetBody) {
+        targetBody.innerHTML = `<tr><td colspan="5" class="text-center">Error loading matrix.</td></tr>`;
+      }
     }
   }
 
   function renderInventoryMatrix(matrix) {
-    inventoryMatrixBody.innerHTML = matrix.map(m => {
-      const st1 = m.stores['ST01'] || { status: 'N/A' };
-      const st2 = m.stores['ST02'] || { status: 'N/A' };
-      const st3 = m.stores['ST03'] || { status: 'N/A' };
+    const targetBody = document.getElementById('inventoryMatrixBody') || inventoryMatrixBody;
+    if (!targetBody) return;
+
+    if (!Array.isArray(matrix) || matrix.length === 0) {
+      targetBody.innerHTML = `<tr><td colspan="5" class="text-center">No inventory health matrix data available.</td></tr>`;
+      return;
+    }
+
+    targetBody.innerHTML = matrix.map(m => {
+      const pName = escapeHtml(m.product_name || m.product_id || 'Unknown');
+      const cat = escapeHtml(m.category || 'General');
+
+      const st1 = (m.stores && m.stores['ST01']) ? m.stores['ST01'] : { status: 'N/A' };
+      const st2 = (m.stores && m.stores['ST02']) ? m.stores['ST02'] : { status: 'N/A' };
+      const st3 = (m.stores && m.stores['ST03']) ? m.stores['ST03'] : { status: 'N/A' };
 
       return `
         <tr>
-          <td><strong>${escapeHtml(m.product_name)}</strong></td>
-          <td>${escapeHtml(m.category)}</td>
+          <td><strong>${pName}</strong></td>
+          <td>${cat}</td>
           <td>${renderHealthPill(st1)}</td>
           <td>${renderHealthPill(st2)}</td>
           <td>${renderHealthPill(st3)}</td>
@@ -258,10 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderHealthPill(storeData) {
-    if (!storeData || storeData.status === 'N/A') return `<span class="health-pill">N/A</span>`;
-    const statusClass = storeData.status.toLowerCase();
-    const covStr = storeData.coverage_days !== null ? `${storeData.coverage_days}d` : 'Inf';
-    return `<span class="health-pill ${statusClass}">${storeData.status} (${covStr})</span>`;
+    if (!storeData || !storeData.status || storeData.status === 'N/A') {
+      return `<span class="health-pill">N/A</span>`;
+    }
+    const statusClass = String(storeData.status).toLowerCase();
+    const covStr = (storeData.coverage_days !== null && storeData.coverage_days !== undefined) 
+      ? `${storeData.coverage_days}d` 
+      : 'Inf';
+    return `<span class="health-pill ${statusClass}">${escapeHtml(storeData.status)} (${covStr})</span>`;
   }
 
   async function fetchAlerts() {
@@ -324,7 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }).join('');
 
-    // Attach click events to open drawer
     document.querySelectorAll('.nexus-alert-card').forEach(card => {
       card.addEventListener('click', (e) => {
         if (e.target.classList.contains('why-btn')) return;
@@ -396,23 +413,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function fetchStores() {
+    const targetBody = document.getElementById('overviewStoresBody') || overviewStoresBody;
     try {
       const res = await fetch('/api/stores');
-      if (!res.ok) throw new Error('Stores fetch failed');
+      if (!res.ok) throw new Error(`Stores fetch failed with status ${res.status}`);
       const stores = await res.json();
-      overviewStoresBody.innerHTML = stores.map((s, i) => `
-        <tr>
-          <td><strong>#${i + 1}</strong></td>
-          <td><strong>${escapeHtml(s.store_name)}</strong></td>
-          <td>${escapeHtml(s.city)}, ${escapeHtml(s.region)}</td>
-          <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan-glow);">₹${s.revenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-          <td style="font-family: var(--font-mono);">${s.units_sold.toLocaleString('en-IN')} units</td>
-          <td style="font-family: var(--font-mono); font-weight: 700;">${s.sales_growth_pct >= 0 ? '+' : ''}${s.sales_growth_pct}%</td>
-          <td><span class="risk-badge ${s.low_stock_count > 0 ? 'badge-stockout' : 'badge-stable'}">${s.low_stock_count} items</span></td>
-        </tr>
-      `).join('');
+      
+      if (!Array.isArray(stores) || stores.length === 0) {
+        if (targetBody) targetBody.innerHTML = `<tr><td colspan="7" class="text-center">No store performance data available.</td></tr>`;
+        return;
+      }
+
+      if (targetBody) {
+        targetBody.innerHTML = stores.map((s, i) => {
+          const rev = typeof s.revenue === 'number' ? s.revenue : 0;
+          const units = typeof s.units_sold === 'number' ? s.units_sold : 0;
+          const growth = typeof s.sales_growth_pct === 'number' ? s.sales_growth_pct : 0;
+          const lowStock = typeof s.low_stock_count === 'number' ? s.low_stock_count : 0;
+
+          const growthSign = growth >= 0 ? '+' : '';
+          const growthStyle = growth >= 0 ? 'color: var(--accent-emerald)' : 'color: var(--accent-rose)';
+
+          return `
+            <tr>
+              <td><strong>#${i + 1}</strong></td>
+              <td><strong>${escapeHtml(s.store_name || s.store_id)}</strong></td>
+              <td>${escapeHtml(s.city || '')}, ${escapeHtml(s.region || '')}</td>
+              <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan-glow);">₹${rev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td style="font-family: var(--font-mono);">${units.toLocaleString('en-IN')} units</td>
+              <td style="${growthStyle}; font-weight: 700; font-family: var(--font-mono);">${growthSign}${growth}%</td>
+              <td><span class="risk-badge ${lowStock > 0 ? 'badge-stockout' : 'badge-stable'}">${lowStock} items</span></td>
+            </tr>
+          `;
+        }).join('');
+      }
     } catch (err) {
       console.error('[Stores] Error:', err);
+      if (targetBody) {
+        targetBody.innerHTML = `<tr><td colspan="7" class="text-center">Error loading store performance.</td></tr>`;
+      }
     }
   }
 
