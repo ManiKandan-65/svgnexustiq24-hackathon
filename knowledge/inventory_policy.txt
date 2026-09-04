@@ -1,0 +1,19 @@
+=== RETAILMIND INVENTORY POLICY & RISK THRESHOLDS ===
+
+1. STOCK-OUT RISK CLASSIFICATION:
+- Stock Coverage (Days Remaining) = Current Stock / Average Daily Sales (30-day window).
+- HIGH STOCK-OUT RISK: Days Remaining <= 7 days. Action: Reorder immediately. Prioritize high-velocity items.
+- MEDIUM STOCK-OUT RISK: Days Remaining > 7 days AND <= 14 days. Action: Schedule reorder within weekly replenishment cycle.
+- STABLE INVENTORY: Days Remaining between 15 and 60 days. Action: Maintain normal monitoring.
+
+2. OVERSTOCK CLASSIFICATION:
+- Days Remaining > 90 days OR Current Stock > 3.0x Reorder Level with declining or stagnant 30-day sales.
+- Action: Review replenishment parameters, halt incoming purchase orders for product, and consider targeted promotional discounts or inter-store transfers.
+
+3. REORDER LEVEL CALCULATION:
+- Reorder Level = (Average Daily Sales * Lead Time in Days) + Safety Stock.
+- Default Lead Time assumption: 7 days. Safety Stock assumption: 7 days of sales.
+
+4. INTERPRETATION & EVIDENCE PRINCIPLES:
+- Every inventory recommendation must explicitly cite current stock, 30-day average daily sales, and calculated days remaining.
+- If average daily sales is zero, stock coverage is treated as infinite / non-applicable, and item is flagged as Slow-Moving / Zero Velocity.

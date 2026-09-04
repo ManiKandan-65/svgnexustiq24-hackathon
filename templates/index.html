@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS RETAIL COMMAND CENTER — Evidence-Grounded Operations Platform</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="nexus-theme">
+  <div class="command-center-layout">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="nexus-sidebar">
+      <div class="sidebar-brand">
+        <div class="nexus-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">NEXUS</span>
+          <span class="brand-subtitle">RETAIL COMMAND</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="viewOverview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Overview</span>
+        </button>
+        <button class="nav-item" data-view="viewInventory">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+          <span>Inventory Catalogue</span>
+        </button>
+        <button class="nav-item" data-view="viewAlerts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Stock Alerts</span>
+          <span id="sidebarAlertBadge" class="nav-badge">0</span>
+        </button>
+        <button class="nav-item" data-view="viewForecast">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          <span>Demand Forecast</span>
+        </button>
+        <button class="nav-item" data-view="viewReorder">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+          <span>Reorder & Transfers</span>
+        </button>
+        <button class="nav-item" data-view="viewSimulator">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>What-If Simulator</span>
+        </button>
+        <button class="nav-item" data-view="viewEvidence">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span>Evidence Copilot</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="engine-badge">
+          <span class="pulse-dot"></span>
+          <span>DETERMINISTIC ENGINE ACTIVE</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="nexus-main">
+
+      <!-- TOP HEADER BAR -->
+      <header class="nexus-topbar">
+        <div class="topbar-title-group">
+          <h1 class="topbar-title">NEXUS RETAIL COMMAND CENTER</h1>
+          <span class="topbar-subtitle">Real-time inventory intelligence & evidence-grounded decisions</span>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="search-box-top">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="topNavSearch" placeholder="Ask Nexus about inventory..." autocomplete="off">
+          </div>
+
+          <div class="store-filter-wrapper">
+            <select id="nexusStoreSelect" class="nexus-select">
+              <option value="ALL">All Network Stores</option>
+              <option value="ST01">Chennai Central</option>
+              <option value="ST02">Coimbatore Main</option>
+              <option value="ST03">Madurai Plaza</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <!-- DATA QUALITY BANNER -->
+      <div id="nexusDataQualityBanner" class="nexus-banner hidden">
+        <span class="banner-icon">⚠️</span>
+        <span id="nexusDataQualityMessage"></span>
+      </div>
+
+      <!-- VIEW 1: COMMAND CENTER OVERVIEW -->
+      <div id="viewOverview" class="nexus-view active">
+        
+        <!-- KPI CARDS -->
+        <section class="nexus-kpi-grid">
+          <div class="nexus-kpi-card cyan-glow">
+            <div class="kpi-top">
+              <span class="kpi-label">TOTAL PRODUCTS</span>
+              <span class="kpi-icon">📦</span>
+            </div>
+            <div class="kpi-main-val" id="kpiTotalProducts">0</div>
+            <div class="kpi-sub-label">Catalog SKUs tracked</div>
+            <div class="kpi-indicator green">ACTIVE</div>
+          </div>
+
+          <div class="nexus-kpi-card red-glow">
+            <div class="kpi-top">
+              <span class="kpi-label">CRITICAL STOCK</span>
+              <span class="kpi-icon">🚨</span>
+            </div>
+            <div class="kpi-main-val color-red" id="kpiCriticalStock">0</div>
+            <div class="kpi-sub-label">Coverage &le; 7 days</div>
+            <div class="kpi-indicator red">URGENT</div>
+          </div>
+
+          <div class="nexus-kpi-card amber-glow">
+            <div class="kpi-top">
+              <span class="kpi-label">AT-RISK PRODUCTS</span>
+              <span class="kpi-icon">⚠️</span>
+            </div>
+            <div class="kpi-main-val color-amber" id="kpiAtRiskProducts">0</div>
+            <div class="kpi-sub-label">Coverage &le; 14 days</div>
+            <div class="kpi-indicator amber">WARNING</div>
+          </div>
+
+          <div class="nexus-kpi-card green-glow">
+            <div class="kpi-top">
+              <span class="kpi-label">STABLE PRODUCTS</span>
+              <span class="kpi-icon">✅</span>
+            </div>
+            <div class="kpi-main-val color-green" id="kpiStableProducts">0</div>
+            <div class="kpi-sub-label">Safe coverage buffer</div>
+            <div class="kpi-indicator green">HEALTHY</div>
+          </div>
+
+          <div class="nexus-kpi-card violet-glow">
+            <div class="kpi-top">
+              <span class="kpi-label">ESTIMATED COVERAGE</span>
+              <span class="kpi-icon">⌛</span>
+            </div>
+            <div class="kpi-main-val color-violet" id="kpiEstimatedCoverage">0d</div>
+            <div class="kpi-sub-label">Network average days</div>
+            <div class="kpi-indicator blue">ESTIMATED</div>
+          </div>
+        </section>
+
+        <!-- INVENTORY HEALTH MATRIX -->
+        <section class="nexus-section">
+          <div class="section-header-nexus">
+            <div>
+              <h2>INVENTORY HEALTH MATRIX</h2>
+              <span class="section-sub">Store x Product inventory status grid (Red = Critical, Orange = Warning, Green = Healthy)</span>
+            </div>
+          </div>
+
+          <div class="matrix-table-wrapper">
+            <table class="nexus-matrix-table" id="inventoryMatrixTable">
+              <thead>
+                <tr id="matrixHeaderRow">
+                  <th>Product Name</th>
+                  <th>Category</th>
+                  <th>Chennai Central</th>
+                  <th>Coimbatore Main</th>
+                  <th>Madurai Plaza</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryMatrixBody">
+                <tr><td colspan="5" class="text-center">Loading inventory health matrix...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- REVENUE & STORE PERFORMANCE -->
+        <section class="nexus-section">
+          <div class="section-header-nexus">
+            <div>
+              <h2>STORE NETWORK PERFORMANCE</h2>
+              <span class="section-sub">Revenue, volume, growth %, and low-stock count by store location</span>
+            </div>
+          </div>
+
+          <div class="nexus-table-wrapper">
+            <table class="nexus-table" id="overviewStoresTable">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Store Location</th>
+                  <th>City / Region</th>
+                  <th>Total Revenue</th>
+                  <th>Units Sold</th>
+                  <th>Monthly Growth %</th>
+                  <th>Low Stock Count</th>
+                </tr>
+              </thead>
+              <tbody id="overviewStoresBody">
+                <tr><td colspan="7" class="text-center">Loading store performance...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- VIEW 2: INVENTORY CATALOGUE -->
+      <div id="viewInventory" class="nexus-view">
+        <div class="section-header-nexus">
+          <div>
+            <h2>INVENTORY CATALOGUE</h2>
+            <span class="section-sub">Full product inventory levels, sales velocity, and stock coverage</span>
+          </div>
+        </div>
+
+        <div class="nexus-controls-bar">
+          <input type="text" id="catalogueSearch" placeholder="Filter by product name or category..." class="nexus-input search">
+          <select id="catalogueRiskFilter" class="nexus-select">
+            <option value="ALL">All Risk Statuses</option>
+            <option value="CRITICAL">Critical Stock-Out Risk</option>
+            <option value="WARNING">Warning Stock-Out Risk</option>
+            <option value="OVERSTOCK">Overstock Surplus</option>
+            <option value="HEALTHY">Healthy Stock</option>
+          </select>
+        </div>
+
+        <div class="nexus-table-wrapper">
+          <table class="nexus-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Store</th>
+                <th>Current Stock</th>
+                <th>Avg Daily Sales</th>
+                <th>Coverage</th>
+                <th>30D Growth</th>
+                <th>Risk Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="catalogueTbody">
+              <tr><td colspan="9" class="text-center">Loading catalogue data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW 3: STOCK ALERTS -->
+      <div id="viewAlerts" class="nexus-view">
+        <div class="section-header-nexus">
+          <div>
+            <h2>SMART STOCK ALERTS</h2>
+            <span class="section-sub">Sorted strictly by operational urgency with explainable decision panels</span>
+          </div>
+        </div>
+
+        <div id="nexusAlertsGrid" class="nexus-alerts-grid">
+          <div class="loading-spinner">Loading stock alerts...</div>
+        </div>
+      </div>
+
+      <!-- VIEW 4: DEMAND FORECAST -->
+      <div id="viewForecast" class="nexus-view">
+        <div class="section-header-nexus">
+          <div>
+            <h2>DEMAND FORECASTING ENGINE</h2>
+            <span class="section-sub">Deterministic 7-Day & 14-Day Demand Forecasts and Projected Stockout Dates</span>
+          </div>
+        </div>
+
+        <div class="nexus-grid-forecast" id="forecastGrid">
+          <div class="loading-spinner">Calculating demand forecasts...</div>
+        </div>
+      </div>
+
+      <!-- VIEW 5: REORDER & TRANSFERS -->
+      <div id="viewReorder" class="nexus-view">
+        
+        <!-- RECOMMENDED REPLENISHMENT ORDERS -->
+        <section class="nexus-section">
+          <div class="section-header-nexus">
+            <div>
+              <h2>RECOMMENDED REPLENISHMENT ORDERS</h2>
+              <span class="section-sub">Calculated via Target Stock = Avg Daily Sales × Target Coverage Days (Default 14 Days)</span>
+            </div>
+          </div>
+
+          <div class="nexus-table-wrapper">
+            <table class="nexus-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Store</th>
+                  <th>Current Stock</th>
+                  <th>Avg Daily Sales</th>
+                  <th>Target Stock (14d)</th>
+                  <th>Recommended Reorder</th>
+                  <th>Timeline</th>
+                  <th>Calculation Formula</th>
+                </tr>
+              </thead>
+              <tbody id="reordersTbody">
+                <tr><td colspan="8" class="text-center">Calculating replenishment recommendations...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SMART TRANSFER NETWORK -->
+        <section class="nexus-section">
+          <div class="section-header-nexus">
+            <div>
+              <h2>SMART TRANSFER NETWORK</h2>
+              <span class="section-sub">Inter-store inventory balancing (Transfer excess stock from Store B to replenish low stock at Store A)</span>
+            </div>
+          </div>
+
+          <div id="transfersGrid" class="transfers-grid">
+            <div class="loading-spinner">Calculating store transfer opportunities...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- VIEW 6: WHAT-IF SIMULATOR -->
+      <div id="viewSimulator" class="nexus-view">
+        <div class="section-header-nexus">
+          <div>
+            <h2>INVENTORY WHAT-IF LAB</h2>
+            <span class="section-sub">Dynamic scenario simulation (Non-mutating operational what-if testing)</span>
+          </div>
+        </div>
+
+        <div class="simulator-container">
+          <div class="simulator-controls-card">
+            <h3>Simulation Parameters</h3>
+            
+            <div class="sim-form-group">
+              <label>Target Store</label>
+              <select id="simStoreSelect" class="nexus-select full-width">
+                <option value="ST01">Chennai Central</option>
+                <option value="ST02">Coimbatore Main</option>
+                <option value="ST03">Madurai Plaza</option>
+              </select>
+            </div>
+
+            <div class="sim-form-group">
+              <label>Target Product</label>
+              <select id="simProductSelect" class="nexus-select full-width">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <div class="sim-form-group">
+              <label>Daily Sales Velocity Change: <span id="simSalesChangeVal" class="highlight-val">0%</span></label>
+              <input type="range" id="simSalesChangeSlider" min="-50" max="100" value="0" step="5" class="nexus-slider">
+            </div>
+
+            <div class="sim-form-group">
+              <label>Incoming Emergency Stock (Units)</label>
+              <input type="number" id="simIncomingStockInput" value="0" min="0" max="500" class="nexus-input full-width">
+            </div>
+
+            <div class="sim-form-group">
+              <label>Target Coverage Days (Default: 14)</label>
+              <input type="number" id="simTargetDaysInput" value="14" min="1" max="60" class="nexus-input full-width">
+            </div>
+          </div>
+
+          <div class="simulator-results-card">
+            <h3>Simulated Scenario Output</h3>
+            <span class="sim-note">Non-mutating dynamic simulation calculated strictly by deterministic engine</span>
+
+            <div class="sim-output-grid" id="simOutputGrid">
+              <div class="sim-stat-box">
+                <span class="sim-label">Baseline Stock / Sales</span>
+                <span class="sim-val" id="simBaseStockVal">12 units (5.3/day)</span>
+              </div>
+              <div class="sim-stat-box">
+                <span class="sim-label">Simulated Sales Velocity</span>
+                <span class="sim-val" id="simSalesVal">5.3 units/day</span>
+              </div>
+              <div class="sim-stat-box">
+                <span class="sim-label">Simulated Total Stock</span>
+                <span class="sim-val" id="simTotalStockVal">12 units</span>
+              </div>
+              <div class="sim-stat-box">
+                <span class="sim-label">Projected Coverage Days</span>
+                <span class="sim-val" id="simCoverageVal">2.3 days</span>
+              </div>
+              <div class="sim-stat-box">
+                <span class="sim-label">Projected Stockout Date</span>
+                <span class="sim-val" id="simStockoutDateVal">Sep 07, 2026</span>
+              </div>
+              <div class="sim-stat-box">
+                <span class="sim-label">Simulated Risk Status</span>
+                <span class="sim-val color-red" id="simRiskVal">CRITICAL</span>
+              </div>
+            </div>
+
+            <div class="sim-action-recommendation">
+              <span class="sim-rec-title">Simulated Recommendation:</span>
+              <p id="simRecommendationText">Reorder immediately to maintain safe target coverage.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 7: EVIDENCE COPILOT -->
+      <div id="viewEvidence" class="nexus-view">
+        <div class="section-header-nexus">
+          <div>
+            <h2>EVIDENCE-GROUNDED COPILOT</h2>
+            <span class="section-sub">Natural language query engine grounded strictly on deterministic Python facts</span>
+          </div>
+        </div>
+
+        <div class="nexus-copilot-card">
+          <div class="copilot-input-wrapper-nexus">
+            <input type="text" id="nexusCopilotQuery" placeholder="Ask Nexus about inventory (e.g. 'Which products are at risk?')..." autocomplete="off">
+            <button id="nexusSendQueryBtn" class="nexus-btn">
+              <span id="nexusBtnText">Ask Nexus</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
+
+          <div class="chips-container-nexus">
+            <span class="chip-title">Suggested Queries:</span>
+            <button class="nexus-chip" data-query="Which products are at risk?">Which products are at risk?</button>
+            <button class="nexus-chip" data-query="Where should stock be transferred?">Where should stock be transferred?</button>
+            <button class="nexus-chip" data-query="What should we reorder?">What should we reorder?</button>
+            <button class="nexus-chip" data-query="Show products with less than 5 days coverage.">Less than 5 days coverage</button>
+            <button class="nexus-chip" data-query="Which store is performing best?">Best performing store</button>
+            <button class="nexus-chip" data-query="Why did Bluetooth Speaker sales drop?">Bluetooth Speaker sales drop</button>
+            <button class="nexus-chip" data-query="computers">Search "computers"</button>
+          </div>
+
+          <!-- RESPONSE PANEL -->
+          <div id="nexusCopilotResponsePanel" class="nexus-response-panel hidden">
+            <div class="resp-header-nexus">
+              <span>EVIDENCE-GROUNDED DECISION PANEL</span>
+              <span id="nexusResponseSourceBadge" class="source-tag">Calculated Facts + Gemini 1.5 Flash</span>
+            </div>
+
+            <div class="resp-section">
+              <span class="resp-label">QUERY</span>
+              <div id="resQueryText" class="resp-box query-box"></div>
+            </div>
+
+            <div class="resp-section">
+              <span class="resp-label">ANSWER</span>
+              <div id="nexusResAnswer" class="resp-box answer-box"></div>
+            </div>
+
+            <div class="resp-section">
+              <span class="resp-label">CALCULATIONS & KEY NUMBERS</span>
+              <div id="nexusResKeyNumbers" class="numbers-grid-nexus"></div>
+            </div>
+
+            <div class="resp-section">
+              <span class="resp-label">EVIDENCE USED</span>
+              <div id="nexusResEvidence" class="resp-box code-box"></div>
+            </div>
+
+            <div class="resp-section">
+              <span class="resp-label">DECISION & RECOMMENDED ACTION</span>
+              <div id="nexusResRecommendation" class="resp-box action-box-nexus"></div>
+            </div>
+
+            <div class="resp-section">
+              <span class="resp-label">ASSUMPTIONS & LIMITATIONS</span>
+              <div id="nexusResLimitations" class="resp-box sub-box"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- EXPLAINABLE DECISION MODAL ("WHY?" PANEL) -->
+  <div id="whyModal" class="nexus-modal-overlay hidden">
+    <div class="nexus-modal-card">
+      <div class="nexus-modal-header">
+        <div>
+          <h3 id="whyTitle">EXPLAINABLE DECISION PANEL</h3>
+          <span class="sub-tag">Deterministic Calculation Audit Trail</span>
+        </div>
+        <button id="closeWhyModalBtn" class="close-btn">&times;</button>
+      </div>
+
+      <div class="nexus-modal-body">
+        <div class="why-breakdown-box">
+          <div class="why-row"><span class="why-key">Target Product:</span><span id="whyProdName" class="why-val">-</span></div>
+          <div class="why-row"><span class="why-key">Store Location:</span><span id="whyStoreName" class="why-val">-</span></div>
+          <div class="why-row"><span class="why-key">Current Stock:</span><span id="whyCurrentStock" class="why-val">-</span></div>
+          <div class="why-row"><span class="why-key">30-Day Avg Sales Velocity:</span><span id="whyAvgSales" class="why-val">-</span></div>
+          <div class="why-row"><span class="why-key">Calculated Stock Coverage:</span><span id="whyCoverage" class="why-val">-</span></div>
+          <div class="why-row"><span class="why-key">Policy Critical Threshold:</span><span id="whyThreshold" class="why-val">7.0 Days</span></div>
+          <div class="why-row"><span class="why-key">Risk Status Result:</span><span id="whyRiskBadge" class="why-val">-</span></div>
+        </div>
+
+        <div class="why-explanation-text" id="whyExplanationText">
+          Current inventory of 12 units divided by recent average daily sales of 5.3 units/day yields approximately 2.3 days of supply. Because 2.3 days is below the safe threshold of 7.0 days, the decision engine flags this item for immediate replenishment.
+        </div>
+
+        <div class="why-footer-tag">
+          <span class="check-icon">✓</span>
+          <span>Calculated by deterministic inventory engine (Reproducible & Audit-Ready)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT DETAIL SIDE DRAWER -->
+  <div id="productDrawer" class="nexus-drawer-overlay hidden">
+    <div class="nexus-drawer-card">
+      <div class="drawer-header">
+        <div>
+          <h3 id="drawerProductName">Product Details</h3>
+          <span id="drawerCategory" class="drawer-sub">Category</span>
+        </div>
+        <button id="closeDrawerBtn" class="close-btn">&times;</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="drawer-stats-grid">
+          <div class="drawer-stat">
+            <span class="d-label">Store Location</span>
+            <span class="d-val" id="drawerStoreName">-</span>
+          </div>
+          <div class="drawer-stat">
+            <span class="d-label">Current Stock</span>
+            <span class="d-val" id="drawerStock">-</span>
+          </div>
+          <div class="drawer-stat">
+            <span class="d-label">Reorder Level</span>
+            <span class="d-val" id="drawerReorderLevel">-</span>
+          </div>
+          <div class="drawer-stat">
+            <span class="d-label">Avg Daily Sales</span>
+            <span class="d-val" id="drawerAvgSales">-</span>
+          </div>
+          <div class="drawer-stat">
+            <span class="d-label">Coverage Days</span>
+            <span class="d-val" id="drawerCoverage">-</span>
+          </div>
+          <div class="drawer-stat">
+            <span class="d-label">Risk Status</span>
+            <span class="d-val" id="drawerRiskBadge">-</span>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4>Demand Forecast (7d / 14d)</h4>
+          <div class="drawer-forecast-box">
+            <div>7-Day Demand: <strong id="drawer7dDemand">-</strong></div>
+            <div>14-Day Demand: <strong id="drawer14dDemand">-</strong></div>
+            <div>Projected Stockout: <strong id="drawerStockoutDate" class="color-cyan">-</strong></div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4>Recommended Action & Reorder</h4>
+          <div class="drawer-action-box" id="drawerActionText">
+            Reorder immediately
+          </div>
+        </div>
+
+        <div class="drawer-section" id="drawerTransferSection">
+          <h4>Store Transfer Opportunity</h4>
+          <div class="drawer-transfer-box" id="drawerTransferText">
+            No transfer opportunity available.
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4>90-Day Daily Sales Trend</h4>
+          <div class="drawer-chart-wrapper" id="drawerSvgChartWrapper">
+            <!-- Rendered by SVG chart engine -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

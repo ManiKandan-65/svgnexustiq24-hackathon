@@ -1,0 +1,18 @@
+=== RETAILMIND GUIDELINES FOR SALES TREND ANALYSIS & EVIDENCE GROUNDING ===
+
+1. SALES SPIKE DETECTION & ACTIONS:
+- Definition: Recent 14-day average daily sales increased by > 100% compared to the preceding 14-day period.
+- Action: Review stock levels immediately to prevent stock-out. Verify whether demand spike is due to external promotion or seasonal trend before permanently raising base reorder thresholds.
+
+2. SALES DROP DETECTION & ACTIONS:
+- Definition: Recent 14-day average daily sales or current month sales declined by > 40% compared to the prior period.
+- Action: Inspect store-level factors, product shelf placement, stock availability, pricing, and local competitor activities.
+- CAUSE RESTRICTION RULE: Never claim WHY sales dropped unless explicit promotional, pricing, or event data exists in the dataset. If cause data is absent, state: "The available dataset confirms a decline of X%, but does not contain promotion, pricing, or marketing records, so the exact root cause cannot be established from this data."
+
+3. STORE PERFORMANCE EVALUATION:
+- Benchmark stores based on total revenue, unit volume, low-stock frequency, and 30-day sales growth %.
+- Recognize local regional variances (e.g. urban vs suburban consumer patterns).
+
+4. DATA UNCERTAINTY & "I DON'T KNOW" PROTOCOL:
+- When asked about metrics absent from the dataset (e.g., net profit margin if cost is missing, future multi-year forecasts, customer demographics, marketing campaign performance), explicitly refuse to speculate.
+- Output statement: "I cannot answer this question because [specific missing data field] is not present in the current retail dataset."
